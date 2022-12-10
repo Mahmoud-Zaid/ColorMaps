@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './style.css'
 import WorldMap from './world-svg.js'
 import Tcolor from './tcolor.js'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import { CirclePicker } from 'react-color'
 
 let width
 let height
@@ -11,6 +12,7 @@ function Tpos() {
   const svg = useRef()
   const button = useRef()
   const canv = useRef()
+  const [paletteColor, setPaletteColor] = useState()
 
   const handleDownload = () => {
     width = svg.current.getBoundingClientRect().width
@@ -46,18 +48,13 @@ function Tpos() {
     }
     img.src = url
   }
-  /*
-  useEffect(() => {
-    handleDownload()
-  }, [])
-*/
   useEffect(() => {
     button.current.addEventListener('click', handleDownload)
   }, [])
 
   return (
     <div style={{ border: '2px solid black' }}>
-      <Tcolor>
+      <Tcolor color={paletteColor}>
         <TransformWrapper>
           <TransformComponent>
             <WorldMap ref={svg} />
@@ -80,6 +77,10 @@ function Tpos() {
       <div>
         <canvas ref={canv}></canvas>
       </div>
+      <CirclePicker
+        color={paletteColor}
+        onChange={(updatedColor) => setPaletteColor(updatedColor)}
+      />
     </div>
   )
 }
